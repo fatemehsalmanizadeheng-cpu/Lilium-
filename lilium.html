@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Lilium</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--p:#ff4d97;--p2:#c2185b;--lav:#e9d9ff;--blush:#ffe3ee;--peach:#ffd9c9;--t:#4a1d38;--card:rgba(255,255,255,.72);--in:#fff;--navbg:#fff;--muted:#a77;--bg:linear-gradient(160deg,#ffe3ee,#e9d9ff 60%,#ffd9c9)}
+body.m{--p:#3d8bff;--p2:#1d4ed8;--lav:#dbeafe;--blush:#e0f2fe;--peach:#cffafe;--t:#0f2740;--card:rgba(255,255,255,.75);--bg:linear-gradient(160deg,#e0f2fe,#dbeafe 60%,#cffafe)}
+body.dark{--t:#f8e6f0;--card:rgba(45,27,52,.85);--bg:linear-gradient(160deg,#1b0f22,#24122e 60%,#2a1620);--in:#2d1b34;--navbg:#21122a;--muted:#c9a1b8;--blush:#3a2140;--lav:#2d1b34;--peach:#2a1620;--p:#ff6fae}
+body.dark.m{--t:#e6f0ff;--card:rgba(20,35,60,.85);--bg:linear-gradient(160deg,#0b1a2e,#102440 60%,#0c2a33);--in:#132a48;--navbg:#0f2038;--muted:#8fb0d6;--blush:#15304f;--lav:#132a48;--peach:#0c2a33;--p:#5aa2ff}
+:root{color-scheme:light}body.dark{color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Vazirmatn,Tahoma,system-ui,sans-serif;color:var(--t);background:var(--bg);min-height:100vh;padding:14px 14px 90px}
+h2{margin:6px 0 10px;font-size:22px;color:var(--p2)}h3{margin:0 0 8px;font-size:15px}
+.c{background:var(--card);backdrop-filter:blur(8px);border-radius:26px;padding:14px;margin-bottom:12px;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{border:0;border-radius:18px;padding:9px 14px;background:linear-gradient(135deg,var(--p),#ff7ab8);color:#fff;font-weight:700;cursor:pointer}
+button.s{background:var(--in);color:var(--p2)}
+input,textarea,select{width:100%;border:2px solid var(--blush);border-radius:16px;padding:9px 12px;background:var(--in);margin:4px 0}
+.r{display:flex;gap:8px;align-items:center}.r>*{flex:1}.r>button{flex:0 0 auto}
+.row{display:flex;align-items:center;gap:8px;padding:6px 0}.row span{flex:1}.done span{text-decoration:line-through;opacity:.5}
+.chk,.circ{width:26px;height:26px;border-radius:50%;border:2px solid var(--p);background:var(--in);padding:0;flex:0 0 26px;color:#fff}.on{background:var(--p)}
+.moods button{font-size:26px;background:var(--in);padding:6px 8px}.moods .sel{background:var(--lav);outline:3px solid var(--p)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--navbg);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-radius:24px 24px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,.12)}
+nav button{flex:1;background:none;color:var(--muted);font-size:11px;padding:6px 2px}nav button b{display:block;font-size:20px}nav .act{color:var(--p)}
+.big{font-size:64px;text-align:center}.tm{font-size:54px;text-align:center;font-weight:800;color:var(--p2)}
+.bar{height:12px;background:var(--in);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--p),#ffb3d3)}
+.cols{display:flex;align-items:flex-end;gap:6px;height:110px}.cols div{flex:1;text-align:center;font-size:11px}.cols i{display:block;background:linear-gradient(0deg,var(--p),#ffb3d3);border-radius:10px 10px 4px 4px;min-height:4px}
+.pr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.pr button{flex:1 1 28%;font-size:12px;padding:8px 4px;line-height:1.5}
+.ltr{direction:ltr;text-align:center;letter-spacing:2px}.wilt{filter:grayscale(.6)}.q{text-align:center;font-weight:700;color:var(--p2)}
+.tot{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tot div{background:var(--in);border-radius:16px;padding:10px;text-align:center}.tot b{display:block;font-size:20px;color:var(--p)}
+small{font-size:11px}
+</style></head><body><div id="app"></div><nav id="nav"></nav>
+<script>
+const tg=window.Telegram&&Telegram.WebApp;try{tg.ready();tg.expand();tg.setHeaderColor('#ffe3ee');tg.setBackgroundColor('#ffe3ee')}catch(e){}
+const DAY=864e5;
+const L={today:['امروز','Today'],timer:['تایمر','Timer'],cycle:['چرخه','Cycle'],workout:['ورزش','Workout'],fin:['مالی','Money'],cal:['تقویم','Calendar'],hi:['سلام','Hi'],water:['آب (لیوان)','Water (glasses)'],mood:['حال امروز','Mood'],tasks:['تسک‌ها','To-do'],habits:['عادت‌ها','Habits'],add:['افزودن','Add'],newTask:['تسک جدید','New task'],newHab:['عادت جدید','New habit'],note:['یادداشت امروز','Note for today'],name:['اسمت؟','Your name?'],birth:['تاریخ تولد','Birth date'],start:['شروع','Start'],pause:['توقف','Pause'],reset:['صفر','Reset'],focus:['تمرکز','Focus'],brk:['استراحت','Break'],study:['مطالعه‌ی امروز','Study today'],mn:['دقیقه','min'],cStart:['شروع پریود','Period started'],cEnd:['پایان پریود','Period ended'],next:['پیش‌بینی بعدی','Next expected'],none:['هنوز ثبت نشده','Nothing logged yet'],week:['این هفته','This week'],follow:['درصد پیگیری','Follow-through'],total:['مجموع کل','All-time totals'],tStudy:['ساعت مطالعه','Study hours'],tTasks:['تسک انجام‌شده','Tasks done'],tWater:['لیوان آب','Glasses of water'],tDays:['روز استفاده','Days used'],goal:['هدف این هفته','Goal this week'],big:['هدف بزرگم ✨','My big goal ✨'],ev:['تاریخ مهم (امتحان، تولد...)','Important date (exam, birthday...)'],evName:['اسم (امتحان، کار...)','Name (exam, task...)'],bday:['تولد تو 🎂','Your birthday 🎂'],go:['بزن بریم 💗','Let\'s go 💗'],lang:['English','فارسی'],manual:['دستی ✏️','Manual ✏️'],setb:['تنظیم','Set'],fmin:['تمرکز (دقیقه)','Focus (min)'],bmin:['استراحت (دقیقه)','Break (min)'],shamsi:['شمسی','Shamsi'],hijri:['قمری','Lunar (Hijri)'],bph:['مثلاً ۱۳۸۰/۰۵/۱۲','e.g. 1380/05/12'],avg:['میانگین چرخه','Average cycle'],save:['ذخیره','Save'],cdays:['روز','days'],wilted:['لیلیوم تشنه‌ست! امروز یه کاری ثبت کن','Lilium is wilting! Log something today'],grow:['لیلیوم داره رشد می‌کنه','Lilium is growing'],pts:['امتیاز','points'],
+gender:['جنسیت','Gender'],girl:['دختر 👧','Girl 👧'],boy:['پسر 👦','Boy 👦'],gHint:['برای اینکه بخش‌ها درست نشون داده بشه','So the right sections show up for you'],gchg:['تغییر جنسیت','Change gender'],dark:['تم تیره 🌙','Dark mode 🌙'],light:['تم روشن ☀️','Light mode ☀️'],
+missed:['انجام نشده','missed'],wNew:['ثبت تمرین','Log a workout'],wType:['نوع (باشگاه، دویدن...)','Type (gym, running...)'],wmin:['دقیقه','Minutes'],wkcal:['کالری سوزانده','Calories burned'],wMin:['دقیقه این هفته','Minutes this week'],wKcal:['کالری این هفته','Calories this week'],wCount:['جلسه این هفته','Sessions this week'],wAvg:['میانگین دقیقه','Avg minutes'],wHist:['تمرین‌های اخیر','Recent workouts'],
+expense:['خرج','Expense'],income:['درآمد','Income'],amount:['مبلغ','Amount'],net:['خالص','Net'],rate:['نرخ پس‌انداز','Savings rate'],dAvg:['میانگین خرج روزانه (۳۰ روز)','Avg daily spend (30 days)'],budget:['بودجه‌ی ماهانه (خرج)','Monthly budget (spending)'],hist:['تراکنش‌های اخیر','Recent transactions'],fWeek:['۳۰ روز اخیر','Last 30 days'],fWarn:['⚠️ خرجت از درآمدت بیشتره','⚠️ You are spending more than you earn'],fGood:['👏 یه چیزی داری پس‌انداز می‌کنی','👏 You are saving something'],fTop:['بیشترین خرج','Biggest category'],fBud:['از بودجه مصرف شده','of budget used'],
+q:['امروز مال توئه 💪🏻','Today is yours 💪🏻','هدفتو بگیر، دختر! ✨','Chase your goal, girl! ✨','تو درخشانی 🦋','You are glowing 🦋','قدم کوچیک هم قدمه 🍓','Small steps still count 🍓','جسور باش، نرم بمون 💅🏻','Be bold, stay soft 💅🏻']};
+const FC=[['food','🍔','غذا','Food'],['transport','🚗','رفت‌وآمد','Transport'],['bills','🧾','قبض و اجاره','Bills'],['shop','🛍️','خرید','Shopping'],['health','💊','سلامت','Health'],['fun','🎉','تفریح','Fun'],['other','✨','متفرقه','Other'],['income','💵','درآمد','Income']];
+const TP=[[25,5],[45,10],[50,10],[60,10],[90,15]];
+const CM=[['امروز روز سخته، ولی تو از پسش برمیای 💗 به خودت مهربون باش','Today is a tough one, but you\'ve got this 💗 Be gentle with yourself'],['بدنت داره کار بزرگی می‌کنه؛ امروز اجازه بده استراحت کنه 🌷','Your body is doing something big. Let it rest today 🌷'],['یه چای گرم، یه پتوی نرم، و کلی مهربونی با خودت 🧸☕','A warm tea, a soft blanket, and lots of kindness for yourself 🧸☕'],['لازم نیست امروز همه‌چی عالی باشه. همین که هستی کافیه 🦋','Today doesn\'t have to be perfect. You being here is enough 🦋'],['قوی‌تر از چیزی هستی که فکر می‌کنی، حتی توی روزای سخت 💪🏻','You\'re stronger than you think, even on hard days 💪🏻'],['امروز سرعتت رو کم کن؛ کارهای کوچیک هم حساب میشه 🍓','Slow down today. Small things still count 🍓'],['آب بخور، یه کم دراز بکش، و بدون لیلیوم کنارته 🌸','Drink some water, lie down a bit, and know Lilium is with you 🌸'],['این روزا هم میگذره، و تو همونقدر درخشانی ✨','This too shall pass, and you\'re still glowing ✨']];
+
+const t=k=>L[k][S.lang=='en'?1:0];
+const q=()=>{const i=(new Date().getDate()%5)*2+(S.lang=='en'?1:0);return L.q[i]};
+const pad=n=>String(n).padStart(2,'0'),iso=d=>{d=d||new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+const ago=n=>{const d=new Date();d.setDate(d.getDate()-n);return iso(d)};
+const fm=s=>new Date(s+'T12:00').toLocaleDateString(S.lang=='en'?'en-US':'fa-IR-u-ca-persian',{month:'short',day:'numeric'});
+const diff=(a,b)=>Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/DAY);
+const nf=n=>Math.round(n).toLocaleString('en-US');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const en2=x=>String(x).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+
+let S=null;try{S=JSON.parse(localStorage.getItem('lil'))}catch(e){}
+S=S||{lang:'fa',habits:[],cycle:[],ev:[],days:{},tasks:[],wk:[],fin:[],budget:0,pts:0,tot:{study:0,tasks:0,water:0,days:0},goal:'',big:'',last:'',name:'',birth:'',g:'',dark:0,sacc:0};
+function fix(){
+  S.tf=S.tf||25;S.tb=S.tb||5;S.tasks=S.tasks||[];S.wk=S.wk||[];S.fin=S.fin||[];S.budget=S.budget||0;
+  if(typeof S.birth=='string')S.birth=S.birth?{c:'g',m:+S.birth.slice(5,7),d:+S.birth.slice(8,10)}:'';
+  if(!Array.isArray(S.ev)){const o=S.ev||{};S.ev=Object.keys(o).map(k=>({dt:k,t:typeof o[k]=='string'?o[k]:o[k].t,x:0}))}
+  Object.keys(S.days).forEach(k=>{const d=S.days[k];if(d.tasks){d.tasks.forEach(x=>S.tasks.push({t:x.t,d:x.d?1:0,c:new Date(k+'T12:00').getTime()}));delete d.tasks}});
+}
+fix();
+const save=()=>{const j=JSON.stringify(S);try{localStorage.setItem('lil',j)}catch(e){}try{if(j.length<3900)tg.CloudStorage.setItem('lil',j)}catch(e){}};
+try{tg.CloudStorage.getItem('lil',(e,v)=>{if(!e&&v&&!localStorage.getItem('lil')){S=JSON.parse(v);fix();R()}})}catch(e){}
+Object.keys(S.days).forEach(k=>{if(diff(k,iso())>6)delete S.days[k]});
+const D=()=>S.days[iso()]||(S.days[iso()]={water:0,mood:'',hab:{},note:'',study:0});
+const touch=(p)=>{const f=S.last!==iso();if(f)S.tot.days++;S.last=iso();S.pts+=p||0;D()};
+let tab='today',tm={left:S.tf*60,run:false,mode:'f'},iv=null,bc='s',pg='',fType='e';
+const wilted=()=>S.last&&diff(S.last,iso())>=2;
+function flower(){const p=S.pts;return wilted()?'🥀':p<10?'🌱':p<40?'🌿':p<100?'🌷':'🌸'}
+
+function NAV(){
+  const tabs=[['today','🌸'],['timer','⏱️'],['workout','🏋️'],['fin','💰'],['cal','🗓️']];
+  if(S.g!='m')tabs.splice(2,0,['cycle','🌙']);
+  if(!tabs.some(x=>x[0]==tab))tab='today';
+  document.getElementById('nav').innerHTML=tabs.map(x=>`<button class="${tab==x[0]?'act':''}" onclick="tab='${x[0]}';R()"><b>${x[1]}</b>${t(x[0])}</button>`).join('');
+}
+function R(){
+  document.body.className=(S.g=='m'?'m ':'')+(S.dark?'dark':'');
+  document.documentElement.lang=S.lang;document.documentElement.dir=S.lang=='en'?'ltr':'rtl';
+  const a=document.getElementById('app');
+  if(!S.name){a.innerHTML=ONB();document.getElementById('nav').innerHTML='';return}
+  if(!S.g){a.innerHTML=GCH();document.getElementById('nav').innerHTML='';return}
+  NAV();
+  a.innerHTML={today,timer:timerV,cycle:cycleV,workout:wkV,fin:finV,cal}[tab]();
+  if(tab=='timer')tick(true);
+}
+
+/* ---------- onboarding & gender ---------- */
+function ONB(){return `<h2>Lilium 🌸</h2><div class="c"><h3>${t('name')}</h3><input id="nm"><h3>${t('birth')}</h3>${bdForm()}<h3>${t('gender')}</h3><div class="r" id="gs">${gB()}</div><div class="r" style="margin-top:10px"><button class="s" onclick="S.lang=S.lang=='en'?'fa':'en';R()">${t('lang')}</button><button onclick="ob()">${t('go')}</button></div></div>`}
+function gB(){return [['f','girl'],['m','boy']].map(x=>`<button class="${pg==x[0]?'':'s'}" onclick="pg='${x[0]}';document.getElementById('gs').innerHTML=gB()">${t(x[1])}</button>`).join('')}
+function GCH(){return `<h2>Lilium 🌸</h2><div class="c"><h3>${t('gender')}</h3><p class="q" style="font-size:13px">${t('gHint')}</p><div class="r"><button onclick="SG('f')">${t('girl')}</button><button class="s" onclick="SG('m')">${t('boy')}</button></div></div>`}
+function SG(g){S.g=g;tab='today';save();R()}
+function ob(){const n=nm.value.trim();if(!n)return;if(!pg){document.getElementById('gs').style.outline='2px solid #e53935';return}if(!rb())return;S.name=n;S.g=pg;touch(0);save();R()}
+
+/* ---------- birthday ---------- */
+function bdForm(){const b=S.birth||{};bc=b.c=='h'?'h':'s';const v=b.y?b.y+'/'+pad(b.m)+'/'+pad(b.d):'';return `<div class="r" id="bcs">${bcB()}</div><input id="bd" class="ltr" inputmode="numeric" maxlength="10" placeholder="${t('bph')}" value="${v}" oninput="bm(this)">`}
+function bcB(){return [['s','shamsi'],['h','hijri']].map(x=>`<button class="${bc==x[0]?'':'s'}" onclick="bc='${x[0]}';document.getElementById('bcs').innerHTML=bcB()">${t(x[1])}</button>`).join('')}
+function bm(e){let v=en2(e.value).replace(/\D/g,'').slice(0,8);if(v.length>6)v=v.slice(0,4)+'/'+v.slice(4,6)+'/'+v.slice(6);else if(v.length>4)v=v.slice(0,4)+'/'+v.slice(4);e.value=v;e.style.borderColor=''}
+function rb(){const e=document.getElementById('bd'),v=en2(e.value).replace(/\D/g,'');if(!v){S.birth='';return true}
+  const y=+v.slice(0,4),m=+v.slice(4,6),d=+v.slice(6,8),mx=bc=='s'?(m<=6?31:30):30;
+  if(v.length!=8||y<1200||y>1500||m<1||m>12||d<1||d>mx){e.style.borderColor='#e53935';return false}
+  S.birth={c:bc,y,m,d};return true}
+function nextB(){const b=S.birth;if(!b||!b.y)return '';const cal={s:'persian',h:'islamic-umalqura',g:'gregory'}[b.c],f=new Intl.DateTimeFormat('en-US-u-ca-'+cal+'-nu-latn',{month:'numeric',day:'numeric'});
+  for(const dd of [b.d,b.d-1]){const x=new Date();x.setHours(12,0,0,0);for(let i=0;i<400;i++){const p=f.formatToParts(x).reduce((o,q)=>(o[q.type]=+q.value,o),{});if(p.month==b.m&&p.day==dd)return iso(x);x.setDate(x.getDate()+1)}}return ''}
+function SB(){if(!rb())return;save();R()}
+
+/* ---------- today ---------- */
+function today(){const d=D();return `<h2>${t('hi')} ${esc(S.name)} ${flower()}</h2><p class="q">${q()}</p>${cmC()}
+<div class="c"><h3>💧 ${t('water')}: ${d.water}/8</h3><div class="bar"><i style="width:${Math.min(100,d.water*12.5)}%"></i></div><div class="r" style="margin-top:8px"><button class="s" onclick="W(-1)">−</button><button onclick="W(1)">+ 🥤</button></div></div>
+<div class="c"><h3>${t('mood')}</h3><div class="moods r">${['😍','😊','😐','😢','😡'].map(m=>`<button class="${d.mood==m?'sel':''}" onclick="M('${m}')">${m}</button>`).join('')}</div></div>
+<div class="c"><h3>${t('tasks')}</h3>${tasksH()}<div class="r"><input id="ti" placeholder="${t('newTask')}"><button onclick="AT()">${t('add')}</button></div></div>
+<div class="c"><h3>${t('habits')}</h3>${S.habits.map((h,i)=>{const o=d.hab[i];return `<div class="row ${o?'done':''}"><button class="chk ${o?'on':''}" onclick="HB(${i})">${o?'✓':''}</button><span>${esc(h.n)}</span><b>🔥${h.s||0}</b><button class="s" onclick="S.habits.splice(${i},1);D().hab={};save();R()">✕</button></div>`}).join('')}<div class="r"><input id="hi" placeholder="${t('newHab')}"><button onclick="AH()">${t('add')}</button></div></div>
+<div class="c"><h3>${t('note')}</h3><textarea rows="2" onchange="D().note=this.value;touch(1);save()">${esc(d.note)}</textarea></div>
+${weekC()}
+<div class="c"><div class="r"><button class="s" onclick="S.dark=S.dark?0:1;save();R()">${S.dark?t('light'):t('dark')}</button><button class="s" onclick="S.lang=S.lang=='en'?'fa':'en';save();R()">${t('lang')}</button></div><div class="r" style="margin-top:8px"><button class="s" onclick="S.g='';save();R()">${t('gchg')}</button></div></div>`}
+function tasksH(){const now=Date.now();return S.tasks.map((x,i)=>({x,i,late:!x.d&&now-x.c>DAY})).sort((a,b)=>(b.late-a.late)||(a.x.d-b.x.d)).map(o=>`<div class="row ${o.x.d?'done':''}"><button class="chk ${o.x.d?'on':''}" onclick="TK(${o.i})">${o.x.d?'✓':''}</button><span>${esc(o.x.t)}${o.late?` <small style="color:#e53935">${t('missed')}</small>`:''}</span><button class="s" onclick="DT(${o.i})">✕</button></div>`).join('')||t('none')}
+function W(n){const d=D();if(n<0&&!d.water)return;d.water+=n;S.tot.water+=n;touch(n>0?1:0);save();R()}
+function M(m){const d=D();if(!d.mood)touch(1);d.mood=m;save();R()}
+function AT(){const v=ti.value.trim();if(!v)return;S.tasks=S.tasks.filter(x=>Date.now()-x.c<=DAY);S.tasks.push({t:v,d:0,c:Date.now()});save();R()}
+function TK(i){const k=S.tasks[i];k.d=k.d?0:1;S.tot.tasks+=k.d?1:-1;touch(k.d?5:0);if(!k.d)S.pts=Math.max(0,S.pts-5);save();R()}
+function DT(i){S.tasks.splice(i,1);save();R()}
+function AH(){const v=hi.value.trim();if(!v)return;S.habits.push({n:v,s:0,l:''});save();R()}
+function HB(i){const d=D(),h=S.habits[i];if(d.hab[i]){d.hab[i]=0;h.s=Math.max(0,h.s-1);h.l=h.s?ago(1):'';S.pts=Math.max(0,S.pts-3)}else{d.hab[i]=1;h.s=h.l==ago(1)?h.s+1:1;h.l=iso();touch(3)}save();R()}
+function score(k){const d=S.days[k];if(!d)return 0;const p=[Math.min(1,d.water/8)];const ts=S.tasks.filter(x=>iso(new Date(x.c))==k);if(ts.length)p.push(ts.filter(x=>x.d).length/ts.length);const hc=S.habits.length;if(hc)p.push(Object.values(d.hab||{}).filter(Boolean).length/hc);return p.reduce((a,b)=>a+b,0)/p.length}
+function weekC(){const ds=[6,5,4,3,2,1,0].map(ago),mx=Math.max(1,...ds.map(k=>(S.days[k]||{study:0}).study)),pc=Math.round(ds.reduce((a,k)=>a+score(k),0)/7*100),T=S.tot;
+  return `<div class="c"><h3>${t('week')}</h3><div class="cols">${ds.map(k=>{const d=S.days[k]||{study:0,mood:''};return `<div><i style="height:${Math.round(d.study/mx*70)}px"></i>${d.mood||'·'}<br>${fm(k).split(' ')[0]}</div>`}).join('')}</div></div><div class="c"><h3>${t('follow')}: ${pc}%</h3><div class="bar"><i style="width:${pc}%"></i></div></div><div class="c"><h3>${t('total')}</h3><div class="tot"><div><b>${(T.study/3600).toFixed(1)}</b>${t('tStudy')}</div><div><b>${T.tasks}</b>${t('tTasks')}</div><div><b>${T.water}</b>${t('tWater')}</div><div><b>${T.days}</b>${t('tDays')}</div></div></div>`}
+
+/* ---------- timer ---------- */
+function timerV(){const p=S.pts,nx=p<10?10:p<40?40:100,pr=p>=100?100:Math.round(p/nx*100);return `<h2>${t('timer')}</h2>
+<div class="c"><div class="big ${wilted()?'wilt':''}">${flower()}</div><p class="q">${wilted()?t('wilted'):t('grow')} · ${p} ${t('pts')}</p><div class="bar"><i style="width:${pr}%"></i></div></div>
+<div class="c"><div class="pr">${TP.map(x=>`<button class="${!S.cu&&S.tf==x[0]&&S.tb==x[1]?'':'s'}" onclick="PS(${x[0]},${x[1]})">${x[0]}<br>+${x[1]}</button>`).join('')}<button class="${S.cu?'':'s'}" onclick="S.cu=1;save();R()">${t('manual')}</button></div>${S.cu?`<div class="r"><div><h3>${t('fmin')}</h3><input id="cf" class="ltr" inputmode="numeric" value="${S.tf}"></div><div><h3>${t('bmin')}</h3><input id="cb" class="ltr" inputmode="numeric" value="${S.tb}"></div><button onclick="CT()" style="margin-top:22px">${t('setb')}</button></div>`:''}
+<div class="r" style="justify-content:center"><button class="${tm.mode=='f'?'':'s'}" onclick="SM('f')">${t('focus')} ${S.tf}</button><button class="${tm.mode=='b'?'':'s'}" onclick="SM('b')">${t('brk')} ${S.tb}</button></div><div class="tm" id="tt"></div><div class="r"><button id="tb" onclick="TG()"></button><button class="s" onclick="SM(tm.mode)">${t('reset')}</button></div><p class="q" id="ts"></p></div>`}
+function PS(f,b){S.tf=f;S.tb=b;S.cu=0;save();SM('f')}
+function CT(){const f=Math.round(+en2(cf.value)),b=Math.round(+en2(cb.value));if(!(f>=1&&f<=300&&b>=1&&b<=120)){cf.style.borderColor=cb.style.borderColor='#e53935';return}S.tf=f;S.tb=b;save();SM('f')}
+function SM(m){tm={left:(m=='f'?S.tf:S.tb)*60,run:false,mode:m};clearInterval(iv);R()}
+function TG(){tm.run=!tm.run;clearInterval(iv);if(tm.run)iv=setInterval(()=>{tm.left--;if(tm.mode=='f'){D().study++;S.tot.study++;S.sacc++;if(S.sacc%300==0){touch(3)}else touch(0)}if(tm.left<=0){try{tg.HapticFeedback.notificationOccurred('success')}catch(e){}SM(tm.mode=='f'?'b':'f');return}tick();if(tm.left%10==0)save()},1000);else save();tick(true)}
+function tick(){const e=document.getElementById('tt');if(!e)return;e.textContent=pad(Math.floor(tm.left/60))+':'+pad(tm.left%60);document.getElementById('tb').textContent=tm.run?t('pause'):t('start');document.getElementById('ts').textContent=t('study')+': '+Math.floor(D().study/60)+' '+t('mn')}
+
+/* ---------- cycle (girls only) ---------- */
+function cycleV(){const c=S.cycle,l=c[c.length-1],open=l&&!l.e;let nx='',avg=0;if(l){const ls=c.length>1?c.slice(1).map((x,i)=>diff(c[i].s,x.s)).slice(-6):[28];avg=Math.round(ls.reduce((a,b)=>a+b,0)/ls.length);const d=new Date(l.s+'T12:00');d.setDate(d.getDate()+avg);nx=iso(d)}
+  return `<h2>🌙 ${t('cycle')}</h2>${cmC()}<div class="c">${open?`<button onclick="CE()">${t('cEnd')}</button>`:`<button onclick="CS()">${t('cStart')}</button>`}</div><div class="c"><h3>${t('next')}</h3><div class="q">${nx?fm(nx)+' ('+diff(iso(),nx)+' '+(S.lang=='en'?'days':'روز')+')':t('none')}</div>${c.length>1?`<p class="q" style="font-size:13px;margin:6px 0 0">${t('avg')}: ${avg} ${t('cdays')}</p>`:''}</div><div class="c">${c.slice().reverse().map(x=>`<div class="row"><span>${fm(x.s)} → ${x.e?fm(x.e):'…'}</span></div>`).join('')||t('none')}</div>`}
+const cmC=()=>S.cmd&&S.cmd.d==iso()&&!S.cmd.x?`<div class="c" style="text-align:center;border:2px solid var(--p)"><div class="q" style="font-size:17px;line-height:1.9">${CM[S.cmd.i][S.lang=='en'?1:0]}</div><div style="margin-top:8px"><button class="s" onclick="S.cmd.x=1;save();R()">💗</button></div></div>`:'';
+function CS(){S.cycle.push({s:iso(),e:''});S.cmd={d:iso(),i:Math.floor(Math.random()*CM.length),x:0};try{tg.HapticFeedback.notificationOccurred('success')}catch(e){}touch(1);save();R()}
+function CE(){S.cycle[S.cycle.length-1].e=iso();save();R()}
+
+/* ---------- workout ---------- */
+function wkV(){const since=ago(6),wk=S.wk.filter(x=>x.d>=since),m=wk.reduce((a,x)=>a+x.m,0),k=wk.reduce((a,x)=>a+(x.k||0),0),td=S.wk.filter(x=>x.d==iso());
+  return `<h2>🏋️ ${t('workout')}</h2>
+<div class="c"><h3>${t('wNew')}</h3><input id="wtp" placeholder="${t('wType')}"><div class="r"><div><h3>${t('wmin')}</h3><input id="wmn" class="ltr" inputmode="numeric"></div><div><h3>${t('wkcal')}</h3><input id="wkc" class="ltr" inputmode="numeric"></div></div><button onclick="AW()" style="margin-top:8px;width:100%">${t('add')}</button></div>
+<div class="c"><h3>${t('week')}</h3><div class="tot"><div><b>${nf(m)}</b>${t('wMin')}</div><div><b>${nf(k)}</b>${t('wKcal')}</div><div><b>${wk.length}</b>${t('wCount')}</div><div><b>${wk.length?nf(m/wk.length):0}</b>${t('wAvg')}</div></div></div>
+<div class="c"><h3>${t('today')}</h3>${wList(td)}</div>
+<div class="c"><h3>${t('wHist')}</h3>${wList(S.wk.slice(-30).reverse())}</div>`}
+function wList(arr){return arr.map(x=>{const i=S.wk.indexOf(x);return `<div class="row"><span>${fm(x.d)} · ${esc(x.t)} · ${x.m} ${t('mn')}${x.k?' · '+nf(x.k)+' kcal':''}</span><button class="s" onclick="DW(${i})">✕</button></div>`}).join('')||t('none')}
+function AW(){const tp=wtp.value.trim(),m=Math.round(+en2(wmn.value)),k=Math.round(+en2(wkc.value)||0);if(!tp||!(m>0))return;S.wk.push({d:iso(),t:tp,m,k});touch(3);save();R()}
+function DW(i){S.wk.splice(i,1);save();R()}
+
+/* ---------- finance ---------- */
+function fcName(c){const x=FC.find(y=>y[0]==c)||FC[6];return x[1]+' '+(S.lang=='en'?x[3]:x[2])}
+function finV(){const rows=S.fin.filter(x=>x.d>=ago(29)),inc=rows.filter(x=>x.a>0).reduce((a,x)=>a+x.a,0),exp=-rows.filter(x=>x.a<0).reduce((a,x)=>a+x.a,0),net=inc-exp,rate=inc?Math.round(net/inc*100):0,daily=exp/30;
+  const cat={};rows.filter(x=>x.a<0).forEach(x=>cat[x.c]=(cat[x.c]||0)-x.a);const cs=Object.entries(cat).sort((a,b)=>b[1]-a[1]);
+  const ins=[];if(exp>inc)ins.push(t('fWarn'));else if(inc>0)ins.push(t('fGood'));
+  if(cs.length&&exp&&cs[0][1]/exp>0.4)ins.push(t('fTop')+': '+fcName(cs[0][0]));
+  if(S.budget)ins.push(Math.round(exp/S.budget*100)+'% '+t('fBud'));
+  return `<h2>💰 ${t('fin')}</h2>
+<div class="c"><div class="r" style="margin-bottom:8px"><button class="${fType=='e'?'':'s'}" onclick="fType='e';R()">${t('expense')}</button><button class="${fType=='i'?'':'s'}" onclick="fType='i';R()">${t('income')}</button></div>
+<div class="r"><input id="fAm" class="ltr" inputmode="numeric" placeholder="${t('amount')}"><select id="fCa">${FC.filter(x=>fType=='i'?x[0]=='income':x[0]!='income').map(x=>`<option value="${x[0]}">${x[1]} ${S.lang=='en'?x[3]:x[2]}</option>`).join('')}</select></div>
+<div class="r" style="margin-top:6px"><input id="fNo" placeholder="${t('note')}"><button onclick="AF()">${t('add')}</button></div></div>
+<div class="c"><h3>${t('fWeek')}</h3><div class="tot"><div><b>${nf(inc)}</b>${t('income')}</div><div><b>${nf(exp)}</b>${t('expense')}</div><div><b style="color:${net<0?'#e53935':'inherit'}">${nf(net)}</b>${t('net')}</div><div><b>${rate}%</b>${t('rate')}</div></div>
+<p class="q" style="font-size:13px">${t('dAvg')}: ${nf(daily)}</p>
+${cs.map(([c,v])=>`<div class="row"><span>${fcName(c)}</span><b>${Math.round(v/exp*100)}%</b></div><div class="bar"><i style="width:${v/exp*100}%"></i></div>`).join('')}
+${ins.map(x=>`<p class="q" style="font-size:13px">${x}</p>`).join('')}
+<div class="r" style="margin-top:8px"><input id="fBu" class="ltr" inputmode="numeric" placeholder="${t('budget')}" value="${S.budget||''}"><button class="s" onclick="SBu()">${t('save')}</button></div></div>
+<div class="c"><h3>${t('hist')}</h3>${S.fin.slice(-40).reverse().map(x=>{const i=S.fin.indexOf(x);return `<div class="row"><span>${fm(x.d)} · ${fcName(x.c)}${x.n?' · '+esc(x.n):''} · ${x.a>0?'+':''}${nf(x.a)}</span><button class="s" onclick="DF(${i})">✕</button></div>`}).join('')||t('none')}</div>`}
+function AF(){const v=Math.round(+en2(fAm.value).replace(/,/g,''));if(!(v>0))return;const c=fType=='i'?'income':fCa.value;S.fin.push({d:iso(),a:fType=='i'?v:-v,c,n:fNo.value.trim()});save();R()}
+function DF(i){S.fin.splice(i,1);save();R()}
+function SBu(){S.budget=Math.round(+en2(fBu.value).replace(/,/g,''))||0;save();R()}
+
+/* ---------- calendar ---------- */
+function cal(){const evs=S.ev.map((x,i)=>({x,i})).sort((a,b)=>a.x.dt<b.x.dt?-1:1),nb=(()=>{const n=nextB();return n?`<div class="row"><span>${fm(n)} (${diff(iso(),n)} ${t('cdays')})</span></div>`:''})();
+  return `<h2>🗓️ ${t('cal')}</h2><div class="c"><h3>${t('big')}</h3><input value="${esc(S.big)}" onchange="S.big=this.value;save()"><h3>${t('goal')}</h3><textarea rows="2" onchange="S.goal=this.value;save()">${esc(S.goal)}</textarea></div>
+<div class="c"><h3>${t('bday')}</h3>${bdForm()}<div class="r" style="margin-top:6px"><button onclick="SB()">${t('save')}</button></div>${nb}</div>
+<div class="c"><h3>${t('ev')}</h3><div class="r"><input id="ed" type="date"><input id="et" placeholder="${t('evName')}"></div><button onclick="AE()" style="margin-top:6px;width:100%">${t('add')}</button>
+${evs.map(o=>`<div class="row ${o.x.x?'done':''}"><button class="circ ${o.x.x?'on':''}" onclick="EV(${o.i})">${o.x.x?'✓':''}</button><span>${fm(o.x.dt)} · ${esc(o.x.t)}</span><button class="s" onclick="DE(${o.i})">✕</button></div>`).join('')||t('none')}</div>`}
+function AE(){if(!ed.value||!et.value.trim())return;S.ev.push({dt:ed.value,t:et.value.trim(),x:0});save();R()}
+function EV(i){S.ev[i].x=S.ev[i].x?0:1;save();R()}
+function DE(i){S.ev.splice(i,1);save();R()}
+
+R();
+</script></body></html>
